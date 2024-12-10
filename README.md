@@ -24,7 +24,7 @@ brew install blackhole-2ch
 I am currently testing with 2ch
 After installation, find Audio MIDI Setup in the Mac OSX dashboard, and when you see a device with a black hole, it means the installation is successful.
 
-<img src="https://raw.githubusercontent.com/ethanzhrepo/polyglot_swift/refs/heads/main/assets/3.png" width="500px"/>
+<img src="https://raw.githubusercontent.com/ethanzhrepo/PolyglotSwift/refs/heads/main/assets/3.png" width="500px"/>
 
 点击左下角➕，添加一个Multi-Output Device
 Click the ➕ button in the lower left corner to add a Multi-Output Device
@@ -33,7 +33,7 @@ Click the ➕ button in the lower left corner to add a Multi-Output Device
 
 At this time, click the small speaker in the system status bar, and there will be an additional output device, and the sound will be switched to this output device (there will be a bug, that is, the volume cannot be adjusted after switching, so adjust the volume before switching)
 
-<img src="https://raw.githubusercontent.com/ethanzhrepo/polyglot_swift/refs/heads/main/assets/4.png" width="300px"/>
+<img src="https://raw.githubusercontent.com/ethanzhrepo/PolyglotSwift/refs/heads/main/assets/4.png" width="300px"/>
 
 2、在本地启动一个翻译模型，我用的是  
 
@@ -100,9 +100,9 @@ Returns
 
 Next, open any English audio or video conference or online video and start playing. Because of multi-output, the speaker will also make sound. Click "Start" of the program, and a draggable floating layer with a semi-transparent background will appear on the screen, which monitors the sound stream from the blackhole virtual device in real time and transcribes and translates it.
 
-<img src="https://raw.githubusercontent.com/ethanzhrepo/polyglot_swift/refs/heads/main/assets/5.png" width="500px"/>
+<img src="https://raw.githubusercontent.com/ethanzhrepo/PolyglotSwift/refs/heads/main/assets/5.png" width="500px"/>
 
-<img src="https://raw.githubusercontent.com/ethanzhrepo/polyglot_swift/refs/heads/main/assets/1.png" width="500px"/>
+<img src="https://raw.githubusercontent.com/ethanzhrepo/PolyglotSwift/refs/heads/main/assets/1.png" width="500px"/>
 
 TODO:
 
