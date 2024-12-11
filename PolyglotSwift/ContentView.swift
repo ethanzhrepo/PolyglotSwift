@@ -23,9 +23,13 @@ class SubtitleWindowManager: ObservableObject {
     @Published var lastTranslation: String = ""       // 存储上一条句子的翻译
     @Published var lastTwoSentences: [String] = []  // Add this property
     private var translatedSentences: Set<String> = []  // Add this property
+    private var selectedInputLanguage: String
+    private var selectedOutputLanguage: String
     
-    init(configuration: TranslationSession.Configuration?) {
+    init(configuration: TranslationSession.Configuration?, inputLanguage: String, outputLanguage: String) {
         self.configuration = configuration
+        self.selectedInputLanguage = inputLanguage
+        self.selectedOutputLanguage = outputLanguage
     }
     
     @Published var subtitleText: String = "" {
@@ -53,10 +57,31 @@ class SubtitleWindowManager: ObservableObject {
     }
     
     private func translateSegment(_ text: String) {
+        // languageLangMapping 
+        let languageLangMapping = [
+            "zh-CN": "cmn",
+            "en-US": "eng",
+            "fr-FR": "fra",
+            "de-DE": "deu",
+            "it-IT": "ita",
+            "ja-JP": "jpn",
+            "ko-KR": "kor",
+            "pt-PT": "por",
+            "ru-RU": "rus",
+            "es-ES": "spa",
+            "vi-VN": "vie",
+        ]
+
+        let sourceLang = languageLangMapping[selectedInputLanguage] ?? "eng"
+        let targetLang = languageLangMapping[selectedOutputLanguage] ?? "cmn"
+
         Task {
             do {
                 let translator = LocalRestTranslator()
-                let translatedText = try await translator.translate(text)
+                let translatedText = try await translator.translate(text,
+                    from: sourceLang,
+                    to: targetLang
+                )
                 DispatchQueue.main.async {
                     self.lastTranslation = translatedText
                 }
@@ -327,7 +352,11 @@ struct ContentView: View {
     @State private var selectedInputLanguage: String = "English"
     @State private var selectedOutputLanguage: String = "简体中文"
     @State private var isRunning: Bool = false
-    @StateObject private var windowManager = SubtitleWindowManager(configuration: nil)
+    @StateObject private var windowManager = SubtitleWindowManager(
+        configuration: nil, 
+        inputLanguage: "en-US", 
+        outputLanguage: "zh-CN"
+    )
     @StateObject private var speechRecognitionManager = SpeechRecognitionManager()
     @StateObject private var statusBarManager = StatusBarManager()
 
@@ -360,9 +389,18 @@ struct ContentView: View {
 
     private let inputLanguages = [
         "English": "en-US",
+        "French": "fr-FR",
+        "German": "de-DE",
+        "Italian": "it-IT",
+        "Japanese": "ja-JP",
+        "Korean": "ko-KR",
+        "Portuguese": "pt-PT",
+        "Russian": "ru-RU",
+        "Spanish": "es-ES",
+        "Vietnamese": "vi-VN"
     ]
 
-    private let outputLanguages = ["简体中文"]
+    private let outputLanguages = ["简体中文", "English", "French", "German", "Italian", "Japanese", "Korean", "Portuguese", "Russian", "Spanish", "Vietnamese"]
 
     class AudioDelegate: NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
         func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {

@@ -2,8 +2,8 @@ import Foundation
 
 struct TranslationRequest: Codable {
     let text: String
-    let source_lang: String
-    let target_lang: String
+    let src_lang: String
+    let tgt_lang: String
 }
 
 struct TranslationResponse: Codable {
@@ -14,8 +14,8 @@ class LocalRestTranslator {
     private let baseURL = "http://127.0.0.1:8000/translate/"
     
     func translate(_ text: String, 
-                  from sourceLang: String = "en", 
-                  to targetLang: String = "zh") async throws -> String {
+                  from sourceLang: String,
+                  to targetLang: String) async throws -> String {
         // 创建 URL
         guard let url = URL(string: baseURL) else {
             throw TranslationError.invalidURL
@@ -24,8 +24,8 @@ class LocalRestTranslator {
         // 准备请求数据
         let request = TranslationRequest(
             text: text,
-            source_lang: sourceLang,
-            target_lang: targetLang
+            src_lang: sourceLang,
+            tgt_lang: targetLang
         )
         let jsonData = try JSONEncoder().encode(request)
         
