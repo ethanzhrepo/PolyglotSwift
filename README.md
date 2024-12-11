@@ -95,6 +95,46 @@ Returns
 ```
 
 
+An implementation with facebook/hf-seamless-m4t-medium [https://huggingface.co/facebook/seamless-m4t-medium](https://huggingface.co/facebook/seamless-m4t-medium)
+
+(LICENSE: cc-by-nc-4.0)
+
+这个是基于seamless-m4t-medium的一个实现，条件有限，跑large会卡， 所以选了个小一点的模型。以下是本地服务器的代码，启动代码还是跟上面一样。只是换了个实现的模型。（用这个建议换到seamless分支）
+
+```python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from transformers import AutoProcessor, SeamlessM4TModel
+
+# Initialize the processor and model globally to avoid reloading them for every request
+processor = AutoProcessor.from_pretrained("facebook/hf-seamless-m4t-medium")
+model = SeamlessM4TModel.from_pretrained("facebook/hf-seamless-m4t-medium")
+
+# Create FastAPI app
+app = FastAPI()
+
+# Define the request body structure
+class TranslationRequest(BaseModel):
+    text: str
+    src_lang: str = 'eng'  # Default to English if no source language is provided
+    tgt_lang: str = 'cmn'  # Default to Chinese if no target language is provided
+
+@app.post("/translate")
+async def translate(request: TranslationRequest):
+    try:
+        # Process the input text
+        text_inputs = processor(text=request.text, src_lang=request.src_lang, return_tensors="pt")
+
+        # Generate the translated text
+        output_tokens = model.generate(**text_inputs, tgt_lang=request.tgt_lang, generate_speech=False)
+        translated_text = processor.decode(output_tokens[0].tolist()[0], skip_special_tokens=True)
+
+        return {"translated_text": translated_text}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
 
 3、接下来打开任意英文音频或者打开视频会议或者打开在线视频，开始播放，因为multi-output的缘故，speaker也会发声，点击程序的“Start”, 屏幕上会出现一个底色为半透明的 可拖动的浮层，实时监听来自blackhole虚拟设备的声音流，并将其转录和翻译出来。
 
