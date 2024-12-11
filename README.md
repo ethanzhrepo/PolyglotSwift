@@ -99,7 +99,7 @@ An implementation with facebook/hf-seamless-m4t-medium [https://huggingface.co/f
 
 (LICENSE: cc-by-nc-4.0)
 
-这个是基于seamless-m4t-medium的一个实现，条件有限，跑large会卡， 所以选了个小一点的模型。以下是本地服务器的代码，启动代码还是跟上面一样。只是换了个实现的模型。
+这个是基于seamless-m4t-medium的一个实现，条件有限，跑large会卡， 所以选了个小一点的模型。以下是本地服务器的代码，启动代码还是跟上面一样。只是换了个实现的模型。（用这个建议换到seamless分支）
 
 ```python
 from fastapi import FastAPI, HTTPException
